@@ -8,7 +8,7 @@ public class ButtonCreator : MonoBehaviour
     [SerializeField]
     ButtonSetDefinition[] buttons;
 
-	void onGUI()
+	void OnGUI()
     {
         foreach (ButtonSetDefinition button in buttons)
         {

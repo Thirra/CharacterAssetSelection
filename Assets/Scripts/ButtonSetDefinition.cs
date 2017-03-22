@@ -23,18 +23,6 @@ public class ButtonSetDefinition
 
         //The left and right buttons will be used to change between the assets, so the values may be similar
 
-    // --------- LEFT BUTTON -------- //
-    [Range(0, 1000)]
-    public float leftXPosition;
-    // ------------------------------ //
-
-
-    // -------- RIGHT BUTTON -------- //
-    [Range(0, 1000)]
-    public float rightXPosition;
-    // ------------------------------ //
-
-
     // ----- SIDE BUTTON VALUES ----- //
     [Range(0, 900)]
     public float sideButtonWidth;
@@ -43,10 +31,42 @@ public class ButtonSetDefinition
     public float sideButtonHeight;
     // ------------------------------ //
 
+    [Range(0, 100)]
+    public float range;
+
     [SerializeField]
     private string assetName;
 
     public GUIStyle style;
+
+    public Texture leftArrow;
+
+    public Texture rightArrow;
+
+    public string[] assetNumber;
+
+    int currentIndex = 0;
+
+    public int CurrentIndex
+    {
+        get
+        {
+            return currentIndex;
+        }
+        set
+        {
+            if (value < 0)
+            {
+                currentIndex = assetNumber.Length - 1;
+            }
+
+            else if (value > assetNumber.Length - 1)
+            {
+                currentIndex = 0;
+            }
+            currentIndex = value;
+        }
+    }
 
 	public void Draw()
     {
@@ -61,16 +81,16 @@ public class ButtonSetDefinition
             //Do something
         }
 
-        ////Left Button
-        //if (GUI.Button(new Rect(leftXPosition, midYPosition, sideButtonWidth, sideButtonHeight), assetName, style))
-        //{
-        //    //Do something
-        //}
+        //Left Button
+        if (GUI.Button(new Rect((-sideButtonWidth - range + midXPosition), (midYPosition + (midHeight * 0.2f)), sideButtonWidth, sideButtonHeight), leftArrow, style))
+        {
+            currentIndex -= 1;
+        }
 
-        ////Right Button
-        //if (GUI.Button(new Rect(rightXPosition, midYPosition, sideButtonWidth, sideButtonHeight), assetName, style))
-        //{
-        //    //Do something
-        //}
+        //Right Button
+        if (GUI.Button(new Rect((midWidth + range + midXPosition), (midYPosition + (midHeight * 0.2f)), sideButtonWidth, sideButtonHeight), rightArrow, style))
+        {
+            currentIndex += 1;
+        }
     }
 }
