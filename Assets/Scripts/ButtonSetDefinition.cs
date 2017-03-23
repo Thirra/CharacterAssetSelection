@@ -43,33 +43,24 @@ public class ButtonSetDefinition
 
     public Texture rightArrow;
 
-    public string[] assetNumber;
+    [SerializeField]
+    private string[] assetNumber;
 
     int currentIndex = 0;
 
-    public int CurrentIndex
-    {
-        get
-        {
-            return currentIndex;
-        }
-        set
-        {
-            if (value < 0)
-            {
-                currentIndex = assetNumber.Length - 1;
-            }
-
-            else if (value > assetNumber.Length - 1)
-            {
-                currentIndex = 0;
-            }
-            currentIndex = value;
-        }
-    }
-
 	public void Draw()
     {
+
+        if (currentIndex < 0)
+        {
+            currentIndex = assetNumber.Length - 1;
+        }
+        if (currentIndex >= assetNumber.Length)
+        {
+            currentIndex = 0;
+        }
+        assetName = assetNumber[currentIndex];
+
         if (style.normal.background == null)
         {
             style = "box";
