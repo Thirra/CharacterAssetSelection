@@ -8,16 +8,16 @@ public class ButtonSetDefinition
     //Some values may be used in the drawing of other buttons
 
     // --------- MID BUTTON --------- //
-    [Range(0, 1000)]
+    [Range(0, 900)]
     public float midXPosition;
 
     [Range(0, 500)]
     public float midYPosition;
 
-    [Range(0, 900)]
+    [Range(0, 300)]
     public float midWidth;
 
-    [Range(0, 500)]
+    [Range(0, 200)]
     public float midHeight;
     // ------------------------------ //
 
@@ -43,6 +43,14 @@ public class ButtonSetDefinition
 
     public Texture rightArrow;
 
+    public string labelName;
+
+    public GUIStyle labelStyle;
+
+    public bool labelOnTop = true;
+
+    private float labelHeight;
+
     [SerializeField]
     private string[] assetNumber;
 
@@ -50,7 +58,6 @@ public class ButtonSetDefinition
 
 	public void Draw()
     {
-
         if (currentIndex < 0)
         {
             currentIndex = assetNumber.Length - 1;
@@ -66,20 +73,38 @@ public class ButtonSetDefinition
             style = "box";
         }
 
+        if (labelStyle.font == null)
+        {
+            labelStyle.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
+        }
+
+        int labelNameLength = labelName.Length * sizeof(char);
+
+        if (labelOnTop == true)
+        {
+            labelHeight = midYPosition - (labelStyle.fontSize + 1);
+        }
+        else
+        {
+            labelHeight = midYPosition + midHeight;
+        }
+        //Label for the main button
+        GUI.Label(new Rect((midXPosition + midWidth/2 - (labelNameLength * 1.6f)), labelHeight, midWidth, midHeight), labelName, labelStyle);
+
         //Main Button (Doesn't necessarily have to be in the middle)
         if (GUI.Button(new Rect(midXPosition, midYPosition, midWidth, midHeight), assetName, style))
         {
-            //Do something
+            //Do nothing
         }
 
         //Left Button
-        if (GUI.Button(new Rect((-sideButtonWidth - range + midXPosition), (midYPosition + (midHeight * 0.2f)), sideButtonWidth, sideButtonHeight), leftArrow, style))
+        if (GUI.Button(new Rect((-sideButtonWidth - range + midXPosition), (midYPosition + (midHeight/2 - sideButtonHeight/2)), sideButtonWidth, sideButtonHeight), leftArrow, style))
         {
             currentIndex -= 1;
         }
 
         //Right Button
-        if (GUI.Button(new Rect((midWidth + range + midXPosition), (midYPosition + (midHeight * 0.2f)), sideButtonWidth, sideButtonHeight), rightArrow, style))
+        if (GUI.Button(new Rect((midWidth + range + midXPosition), (midYPosition + (midHeight/2 - sideButtonHeight/2)), sideButtonWidth, sideButtonHeight), rightArrow, style))
         {
             currentIndex += 1;
         }
