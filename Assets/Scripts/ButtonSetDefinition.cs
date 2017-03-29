@@ -55,9 +55,35 @@ public class ButtonSetDefinition
     private string[] assetNumber;
 
     int currentIndex = 0;
+    int assetLength;
 
-	public void Draw()
+    int textureIndex;
+
+    // ------- TEXTURE VALUES ------- //
+    [Range(0, 900)]
+    public float textureXPosition;
+
+    [Range(0, 500)]
+    public float textureYPosition;
+
+    [Range(0, 1000)]
+    public float textureWidth;
+
+    [Range(0, 1000)]
+    public float textureHeight;
+
+    public Texture2D texture;
+    // ------------------------------ //
+
+    public Texture2D[] assetTextures;
+
+    public void Draw()
     {
+        assetLength = assetNumber.Length;
+
+        assetTextures = new Texture2D[assetLength];
+
+        //Scrolling through the array
         if (currentIndex < 0)
         {
             currentIndex = assetNumber.Length - 1;
@@ -68,11 +94,14 @@ public class ButtonSetDefinition
         }
         assetName = assetNumber[currentIndex];
 
+        texture = assetTextures[currentIndex];
+
         if (style.normal.background == null)
         {
             style = "box";
         }
 
+        //If there is no font chosen, set it to default
         if (labelStyle.font == null)
         {
             labelStyle.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
@@ -108,5 +137,8 @@ public class ButtonSetDefinition
         {
             currentIndex += 1;
         }
+
+        //Texture that correlates with a button
+        GUI.Box(new Rect(textureXPosition, textureYPosition, textureWidth, textureHeight), texture);
     }
 }
