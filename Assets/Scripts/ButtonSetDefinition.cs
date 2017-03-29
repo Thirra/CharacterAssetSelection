@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Values of one button correlate to the values of another button
+
 [System.Serializable]
 public class ButtonSetDefinition
 {
-    //Some values may be used in the drawing of other buttons
-
-    // --------- MID BUTTON --------- //
+    #region Mid Button Parameters
     [Range(0, 900)]
     public float midXPosition;
 
@@ -19,47 +19,55 @@ public class ButtonSetDefinition
 
     [Range(0, 200)]
     public float midHeight;
-    // ------------------------------ //
 
-        //The left and right buttons will be used to change between the assets, so the values may be similar
+    private string assetName;
 
-    // ----- SIDE BUTTON VALUES ----- //
+    [SerializeField]
+    private GUIStyle midButtonStyle;
+    #endregion
+
+    #region Side Button Parameters
     [Range(0, 900)]
     public float sideButtonWidth;
 
     [Range(0, 500)]
     public float sideButtonHeight;
-    // ------------------------------ //
 
     [Range(0, 100)]
     public float range;
 
     [SerializeField]
-    private string assetName;
+    private Texture leftArrow;
 
-    public GUIStyle style;
+    [SerializeField]
+    private Texture rightArrow;
 
-    public Texture leftArrow;
+    [SerializeField]
+    private GUIStyle sideButtonStyle;
+    #endregion
 
-    public Texture rightArrow;
+    #region Label Parameters
+    [SerializeField]
+    private string labelName;
 
-    public string labelName;
+    [SerializeField]
+    private bool labelOnTop = true;
 
-    public GUIStyle labelStyle;
-
-    public bool labelOnTop = true;
+    [SerializeField]
+    private GUIStyle labelStyle;
 
     private float labelHeight;
+    #endregion
 
+    #region Arrays
     [SerializeField]
     private string[] assetNumber;
 
-    int currentIndex = 0;
-    int assetLength;
+    [SerializeField]
+    private Texture2D[] assetTextures;
+    #endregion
 
-    int textureIndex;
-
-    // ------- TEXTURE VALUES ------- //
+    #region Asset Texture Parameters
     [Range(0, 900)]
     public float textureXPosition;
 
@@ -73,14 +81,19 @@ public class ButtonSetDefinition
     public float textureHeight;
 
     private Texture2D texture;
-    // ------------------------------ //
+    #endregion
 
-    public Texture2D[] assetTextures;
+    #region Indices and Ints (Private variables)
+    private int currentIndex = 0;
+    private int textureIndex;
+
+    private int assetLength;
+    #endregion
 
     public void Draw()
     {
+        //Length of the assetTexture array equals the length of the assetNumber array
         assetLength = assetNumber.Length;
-
         System.Array.Resize(ref assetTextures, assetNumber.Length);
 
         //Scrolling through the array
@@ -92,23 +105,31 @@ public class ButtonSetDefinition
         {
             currentIndex = 0;
         }
+        //Making the index of both arrays equal 
         assetName = assetNumber[currentIndex];
-
         texture = assetTextures[currentIndex];
 
-        if (style.normal.background == null)
+        //Setting default backgrounds - Preventative measure for errors
+        if (midButtonStyle.normal.background == null)
         {
-            style = "box";
+            midButtonStyle = GUI.skin.box;
         }
 
-        //If there is no font chosen, set it to default
+        if (sideButtonStyle.normal.background == null)
+        {
+            sideButtonStyle = GUI.skin.box;
+        }
+
+        //Setting default text - Another preventative measure
         if (labelStyle.font == null)
         {
             labelStyle.font = Resources.GetBuiltinResource(typeof(Font), "Arial.ttf") as Font;
         }
 
+        //Getting the width of a label created
         int labelNameLength = labelName.Length * sizeof(char);
 
+        //Setting functionality for labels on top and on bottom
         if (labelOnTop == true)
         {
             labelHeight = midYPosition - (labelStyle.fontSize + 1);
@@ -121,19 +142,19 @@ public class ButtonSetDefinition
         GUI.Label(new Rect((midXPosition + midWidth/2 - (labelNameLength * 1.6f)), labelHeight, midWidth, midHeight), labelName, labelStyle);
 
         //Main Button (Doesn't necessarily have to be in the middle)
-        if (GUI.Button(new Rect(midXPosition, midYPosition, midWidth, midHeight), assetName, style))
+        if (GUI.Button(new Rect(midXPosition, midYPosition, midWidth, midHeight), assetName, midButtonStyle))
         {
-            //Do nothing
+            //Do nothing -> could be a box instead of a button
         }
 
         //Left Button
-        if (GUI.Button(new Rect((-sideButtonWidth - range + midXPosition), (midYPosition + (midHeight/2 - sideButtonHeight/2)), sideButtonWidth, sideButtonHeight), leftArrow, style))
+        if (GUI.Button(new Rect((-sideButtonWidth - range + midXPosition), (midYPosition + (midHeight/2 - sideButtonHeight/2)), sideButtonWidth, sideButtonHeight), leftArrow, sideButtonStyle))
         {
             currentIndex -= 1;
         }
 
         //Right Button
-        if (GUI.Button(new Rect((midWidth + range + midXPosition), (midYPosition + (midHeight/2 - sideButtonHeight/2)), sideButtonWidth, sideButtonHeight), rightArrow, style))
+        if (GUI.Button(new Rect((midWidth + range + midXPosition), (midYPosition + (midHeight/2 - sideButtonHeight/2)), sideButtonWidth, sideButtonHeight), rightArrow, sideButtonStyle))
         {
             currentIndex += 1;
         }

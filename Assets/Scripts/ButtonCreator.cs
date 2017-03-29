@@ -8,7 +8,7 @@ public class ButtonCreator : MonoBehaviour
     [SerializeField]
     ButtonSetDefinition[] buttons;
 
-    // ------- TEXTURE VALUES ------- //
+    #region Texture Values
     [Range(0, 900)]
     public float mainTextureXPosition;
 
@@ -22,12 +22,14 @@ public class ButtonCreator : MonoBehaviour
     public float mainTextureHeight;
 
     public Texture2D mainTexture;
-    // ------------------------------ //
+    #endregion
 
     void OnGUI()
     {
+        //Draws the main texture 
         GUI.Box(new Rect(mainTextureXPosition, mainTextureYPosition, mainTextureWidth, mainTextureHeight), mainTexture);
 
+        //Draws each of the buttons
         foreach (ButtonSetDefinition button in buttons)
         {
             button.Draw();
