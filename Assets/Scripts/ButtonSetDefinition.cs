@@ -72,7 +72,7 @@ public class ButtonSetDefinition
     [Range(0, 1000)]
     public float textureHeight;
 
-    public Texture2D texture;
+    private Texture2D texture;
     // ------------------------------ //
 
     public Texture2D[] assetTextures;
@@ -81,7 +81,7 @@ public class ButtonSetDefinition
     {
         assetLength = assetNumber.Length;
 
-        assetTextures = new Texture2D[assetLength];
+        System.Array.Resize(ref assetTextures, assetNumber.Length);
 
         //Scrolling through the array
         if (currentIndex < 0)
